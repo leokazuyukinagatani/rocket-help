@@ -13,7 +13,12 @@ import { useNavigation } from '@react-navigation/native';
 export function Home() {
   const [statusSelected,setStatusSelected] = useState<'open' | 'closed'>('open');
   const [orders, setOrders] = useState<OrderProps[]>([
-  
+    {
+      id: '123',
+      patrimony: '102030',
+      when: '18/07/2022 ás 23:00',
+      status: 'open'
+    }
   ]);
 
   const navigation = useNavigation(); 
@@ -21,6 +26,10 @@ export function Home() {
 
   function handleNewOrder() {
     navigation.navigate('new');
+  }
+
+  function handleOpenDetails(orderId: string) {
+    navigation.navigate('details', {orderId});
   }
 
   return (
@@ -47,10 +56,10 @@ export function Home() {
       <VStack flex={1} px={6}>
         <HStack w="full" mt={8} mb={4} justifyContent="space-between" alignItems="center">
           <Heading color="gray.100">
-            Meus Chamados
+            Solicitações
           </Heading>
           <Text color="gray.200">
-            3
+            {orders.length}
           </Text>
         </HStack>
         <HStack space={3} mb={8}>
@@ -73,7 +82,7 @@ export function Home() {
         <FlatList 
           data={orders}
           keyExtractor={(item => item.id)}
-          renderItem= {({ item }) => <Order data={item}/>}
+          renderItem= {({ item }) => <Order data={item} onPress={() => handleOpenDetails(item.id)} />}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 75 }}
           ListEmptyComponent={() => (
